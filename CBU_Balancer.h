@@ -35,7 +35,7 @@ private:
     ////
     //// These two following vectors should be used together
     std::vector<std::string> _elements; // Elements (in the recent equation)
-    std::vector<std::vector<unsigned>> _main_matrix; // Main matrix (reactants and products matrix, row = each element, colomn = each compound)
+    std::vector<std::vector<unsigned>> _main_matrix; // Main matrix (reactants and products matrix, row = each element, column = each compound)
     ////
     std::vector<std::vector<unsigned>> _results_coefs;
 
@@ -218,7 +218,7 @@ CBU_Balancer::get_elements_from_compounds_composition(const std::vector<std::map
     }
 }
 
-// This method takes compounds composition (std::vector<std::map>) and elements list (std::vector) as input and outputs a matrix, where [the row is each element] and [the colomn is each compound].
+// This method takes compounds composition (std::vector<std::map>) and elements list (std::vector) as input and outputs a matrix, where [the row is each element] and [the column is each compound].
 HAS_EXCEPTIONS
 std::vector<std::vector<unsigned>>
 CBU_Balancer::_build_matrix(const std::vector<std::map<std::string, unsigned>> &compounds_composition, const std::vector<std::string>& elements) {
@@ -231,7 +231,7 @@ CBU_Balancer::_build_matrix(const std::vector<std::map<std::string, unsigned>> &
         std::vector<std::vector<unsigned>> matrix(elements.size(), std::vector<unsigned>(compounds_composition.size(), 0));
 
         for (size_t i = 0; i < elements.size(); i++) { // row: element
-            for (size_t j = 0; j < compounds_composition.size(); j++) { // colomn: compounds
+            for (size_t j = 0; j < compounds_composition.size(); j++) { // column: compounds
                 matrix[i][j] = static_cast<double>(compounds_composition[j].count(elements[i]) ? compounds_composition[j].at(elements[i]) : 0);
             }
         }
@@ -439,7 +439,7 @@ void CBU_Balancer::_balance_with_given_compounds_str(const std::vector<std::stri
 
         std::vector<std::vector<unsigned>> main_matrix(
             this->_elements.size(), // row is the element
-            std::vector<unsigned>(reactants.size() + products.size(), 0) // colomn is the reactants and the products
+            std::vector<unsigned>(reactants.size() + products.size(), 0) // column is the reactants and the products
             // all filling 0
         );
 
