@@ -2,10 +2,10 @@
 A chemical balancing tool in C++ (new version) by **Frank Yang**. 
 
 ## A powerful chemical balancing tool
-`ChemicalBalancingUtilityNew` (abbr. `CBU_Balancer`) is a C++ header that includes methods for balancing your chemical equations. With perfect encapsulation, you can efficiently and conveniently balance equations anywhere in your program. Our program also comes with a `CBU_Console` library, an original console designed for users who do not wish to delve deeply into C++.
+`ChemicalBalancingUtilityNew` (abbr. `CBU_Balancer`) is a C++ header that includes methods for balancing your chemical equations. With perfect encapsulation, you can efficiently and conveniently balance equations anywhere in your program. My program also comes with a `CBU_Console` library, an original console designed for users who do not wish to delve deeply into C++.
 
 ## _Quick start_
-The following program uses the `CBU_Console` class that comes with ,y program. The `boot()` method of this class will open a console where you can balance equations freely.
+The following program uses the `CBU_Console` class that comes with my project. The `boot()` method of this class will open a console where you can balance equations freely.
 1. Create a new project and `main.cpp`. Be sure your project version is C++17 or later.
 2. Download `CBU_Balancer.h` and `CBU_Console.h` and include them in your `main.cpp`:
    ```cpp
