@@ -20,7 +20,7 @@ The following program uses the `CBU_Console` class that comes with ,y program. T
      return 0;
    }
    ```
-4. In the following console, type `quit()` to quit the console; type `multiple_results(off)` to disable multiple results, type `multiple_results(on)` to allow it. Multiple results is enabled by default (which is to provide at least one **absolutely correct answer**). **Directly type your chemical equation to call the built-in C`hemicalBalancingUtility` to balance**, for example,
+4. In the following console, type `quit()` to quit the console; type `multiple_results(off)` to disable multiple results, type `multiple_results(on)` to allow it. Multiple results is enabled by default (which is to provide at least one **absolutely correct answer**). **Directly type your chemical equation to call the built-in `ChemicalBalancingUtility` to balance**, for example,
    ```
    HNO3 -> NO2 + O2 + H2O
    ```
