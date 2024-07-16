@@ -1,6 +1,13 @@
 //
 // Created and edited by Frank Yang on 7/14/24.
+// 
+
+// Copyright (c) 2024 Frank Yang
+// All rights reserved.
 //
+// This code is proprietary and confidential.
+// Unauthorized copying of this file, via any medium is strictly prohibited.
+
 
 // In this program (i.e., its context),
 // A compound is a chemical compound, e.g., CaSO4, etc.
