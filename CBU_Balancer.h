@@ -1,6 +1,6 @@
 //
 // Created and edited by Frank Yang on 7/14/24.
-// 
+//
 
 // Copyright (c) 2024 Frank Yang
 // All rights reserved.
@@ -42,7 +42,7 @@ private:
     ////
     //// These two following vectors should be used together
     std::vector<std::string> _elements; // Elements (in the recent equation)
-    std::vector<std::vector<unsigned>> _main_matrix; // Main matrix (reactants and products matrix, row = each element, column = each compound)
+    std::vector<std::vector<int>> _main_matrix; // Main matrix (reactants and products matrix, row = each element, column = each compound)
     ////
     std::vector<std::vector<unsigned>> _results_coefs;
 
@@ -67,7 +67,7 @@ private:
     void _balance_with_given_compounds_str(const std::vector<std::string>& reactants, const std::vector<std::string>& products);
 public:
     // Constructors, getters and setters
-    CBU_Balancer() : _multiple_results(true), _max_coef(DEFAULT_MAX_COEF), _reactants_and_products(), _elements(),_main_matrix(),_results_coefs(), _log_status(true) { };
+    CBU_Balancer() : _multiple_results(true), _max_coef(DEFAULT_MAX_COEF), _log_status(true), _reactants_and_products(),_elements(),_main_matrix(), _results_coefs() { };
     void set_multiple_results(bool option) { this->_multiple_results = option; }
     void set_max_coef(unsigned max_coef) { this->_max_coef = max_coef;  }
     void set_log_status(bool option) { this->_log_status = option; };
@@ -78,8 +78,8 @@ public:
     void balance(const std::string& equation);
     // Common getters
     std::pair<std::vector<std::string>, std::vector<std::string>> get_reactants_and_products() { return this->_reactants_and_products; }
-    std::pair<std::vector<std::string>, std::vector<std::vector<unsigned>>> get_main_matrix() { return {this->_elements, this->_main_matrix}; };
-    std::string get_result();
+    std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_main_matrix() { return {this->_elements, this->_main_matrix}; };
+    [[nodiscard]] std::string get_result() const;
     void clear_data();
     static std::string version();
 };
@@ -145,16 +145,16 @@ inline std::pair<std::string, unsigned> CBU_Balancer::_entity_str_to_entity_and_
         int separating_index = -1; // the beginning position index of the coefficient
 
         if (std::isdigit(entity_str[entity_str.size() - 1])) {
-            for (unsigned index = entity_str.size() - 1; index >= 0; index--) {
+            for (size_t index = entity_str.size() - 1; index >= 0; index--) {
                 if (!isdigit(entity_str[index])) {
-                    separating_index = index + 1;
+                    separating_index = static_cast<int>(index) + 1;
                     break;
                 }
             }
         }
 
-        std::pair <std::string, unsigned> entity_and_coefficient; 
-        
+        std::pair <std::string, unsigned> entity_and_coefficient;
+
         // To enhance readability, these conditional statements will not be shortened by the ternary operator (?:).
         if (!is_subcompound) {
             if (separating_index == -1) { // coef = 1
@@ -173,16 +173,18 @@ inline std::pair<std::string, unsigned> CBU_Balancer::_entity_str_to_entity_and_
                 entity_and_coefficient.second = std::stoi(entity_str.substr(separating_index, entity_str.size() - separating_index));
             }
         }
-        
+
         if (!is_subcompound && entity_and_coefficient.first.size() >= 3) {
             std::cout << ("WARNING: special element \"" + entity_and_coefficient.first + "\", the equation may not exist.") << std::endl;
-        } 
-        
+        }
+
         return entity_and_coefficient;
     } catch (const std::invalid_argument &ia) {
-        throw ia.what();
+        std::cout << ia.what() << std::endl;
+        return {};
     } catch (const std::out_of_range &oor) {
-        throw oor.what();
+        std::cout << oor.what() << std::endl;
+        return {};
     } catch (const std::runtime_error &re) {
         std::cerr << re.what() << std::endl;
         return {};
@@ -257,7 +259,7 @@ CBU_Balancer::_build_matrix(const std::vector<std::map<std::string, unsigned>> &
 
         for (size_t i = 0; i < elements.size(); i++) { // row: element
             for (size_t j = 0; j < compounds_composition.size(); j++) { // column: compounds
-                matrix[i][j] = static_cast<double>(compounds_composition[j].count(elements[i]) ? compounds_composition[j].at(elements[i]) : 0);
+                matrix[i][j] = static_cast<int>(compounds_composition[j].count(elements[i]) ? compounds_composition[j].at(elements[i]) : 0);
             }
         }
 
@@ -274,7 +276,9 @@ bool CBU_Balancer::_solving_matrix_using_recursion(std::vector<unsigned>& coeffi
         bool balanced = true;
         for (const auto& element :this->_main_matrix) {
             int sum = 0;
-            for (int i = 0; i < coefficients_temporary.size(); i++) { sum += element[i] * coefficients_temporary[i]; }
+            for (size_t i = 0; i < coefficients_temporary.size(); i++) {
+                sum += static_cast<int>(coefficients_temporary[i]) * element[i];
+            }
             if (sum != 0) { balanced = false; break; }
         }
 
@@ -462,18 +466,18 @@ void CBU_Balancer::_balance_with_given_compounds_str(const std::vector<std::stri
         std::vector<std::vector<unsigned>> reactant_matrix = CBU_Balancer::_build_matrix(reactants_composition, _elements);
         std::vector<std::vector<unsigned>> product_matrix = CBU_Balancer::_build_matrix(products_composition, _elements);
 
-        std::vector<std::vector<unsigned>> main_matrix(
+        std::vector<std::vector<int>> main_matrix(
             this->_elements.size(), // row is the element
-            std::vector<unsigned>(reactants.size() + products.size(), 0) // column is the reactants and the products
+            std::vector<int>(reactants.size() + products.size(), 0) // column is the reactants and the products
             // all filling 0
         );
 
         for (size_t i = 0; i < this->_elements.size(); i++) {
             for (size_t j = 0; j < reactants.size(); ++j) {
-                main_matrix[i][j] = reactant_matrix[i][j];
+                main_matrix[i][j] = static_cast<int>(reactant_matrix[i][j]);
             }
             for (size_t j = 0; j < products.size(); j++) {
-                main_matrix[i][reactants.size() + j] = - product_matrix[i][j];
+                main_matrix[i][reactants.size() + j] = - static_cast<int>(product_matrix[i][j]);
             }
         }
 
@@ -501,7 +505,7 @@ void CBU_Balancer::balance(const std::string &equation) {
 
 // Get results
 HAS_EXCEPTIONS
-inline std::string CBU_Balancer::get_result() {
+inline std::string CBU_Balancer::get_result() const {
     try {
         std::string result_str = "";
         if (this->_reactants_and_products.first.empty() || this->_reactants_and_products.second.empty()) {
@@ -514,7 +518,7 @@ inline std::string CBU_Balancer::get_result() {
         if (this->_results_coefs.size() >= 2) { std::cout << "There are multiple possible solutions. Please select the most correct one." << std::endl; }
 
         for (const auto& solution : this->_results_coefs) { // solution: const std::vector<unsigned>
-            for (int i = 0; i < reactants_count; i++) {
+            for (size_t i = 0; i < reactants_count; i++) {
                 auto coefficient = solution[i];
                 result_str += ((coefficient != 1) ? std::to_string(coefficient) : "");
                 result_str += _reactants_and_products.first[i];
@@ -523,7 +527,7 @@ inline std::string CBU_Balancer::get_result() {
                 }
             }
             result_str += " == ";
-            for (int i = 0; i < products_count; i++) {
+            for (size_t i = 0; i < products_count; i++) {
                 auto coefficient = static_cast<unsigned>(solution[reactants_count + i]);
                 result_str += ((coefficient != 1) ? std::to_string(coefficient) : "");
                 result_str += _reactants_and_products.second[i];
