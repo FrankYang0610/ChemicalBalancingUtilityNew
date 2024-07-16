@@ -46,8 +46,8 @@ Use **`CBU_Balancer balancer = CBU_Balancer()`** to create a new `ChemicalBalanc
    auto reactants = reactants_and_products.first;
    auto products = reactants_and_products.second;
    ```
-4. `std::pair<std::vector<std::string>, std::vector<std::vector<unsigned>>> get_main_matrix()` returns the information of stored equation data. Its `first` is the elements occurred in the equation, and its `second` is the _main matrix_ of the equation. For the _main matrix_, its row is each element (sorted by `std::sort`) and its column is each compound (by given order);
-5. `void clear_data()` clears all stored balancing data. **This is a must when you're to balance another equation.**.
+4. `std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_main_matrix()` returns the information of stored equation data. Its `first` is the elements occurred in the equation, and its `second` is the _main matrix_ of the equation. For the _main matrix_, its row is each element (sorted by `std::sort`) and its column is each compound (by given order);
+5. `void clear_data()` clears all stored balancing data. **This is a must when you're to balance another equation**. 
 6. The following shows an overall sample:
    ```cpp
    balancer.balance("C+O2->CO2");
@@ -58,7 +58,7 @@ Use **`CBU_Balancer balancer = CBU_Balancer()`** to create a new `ChemicalBalanc
    std::cout << balancer.get_result() << std::endl;
    ```
 
-## Configs (`CBU_Balancer`)
+## Config (`CBU_Balancer`)
 1. Use `set_multiple_results(bool option)` to set if you want a multiple results.
 2. Use `set_max_coef(unsigned max_coef)` to set the maximum possible coefficient in the balanced equation. I suggest that `max_coef` should not be greater than 30.
 3. Use `set_log_status(bool option)` to set if you want `std::clog` messages when have. 
