@@ -1,5 +1,5 @@
 # `ChemicalBalancingUtilityNew`
-A chemical balancing tool in C++ (new version) by **Frank Yang**
+A chemical balancing tool in C++ (new version) by **Frank Yang**. 
 
 ## A powerful chemical balancing tool
 `ChemicalBalancingUtilityNew` (abbr. `CBU_Balancer`) is a C++ header that includes methods for balancing your chemical equations. With perfect encapsulation, you can efficiently and conveniently balance equations anywhere in your program. Our program also comes with a `CBU_Console` library, an original console designed for users who do not wish to delve deeply into C++.
