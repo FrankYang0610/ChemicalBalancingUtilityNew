@@ -1,6 +1,13 @@
 //
 // Created by Frank Yang on 7/16/24.
+// 
+
+// Copyright (c) 2024 Frank Yang
+// All rights reserved.
 //
+// This code is proprietary and confidential.
+// Unauthorized copying of this file, via any medium is strictly prohibited.
+
 
 #ifndef CBU_CONSOLE_H
 #define CBU_CONSOLE_H
