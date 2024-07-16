@@ -36,7 +36,7 @@ Use **`CBU_Balancer balancer = CBU_Balancer()`** to create a new `ChemicalBalanc
    ```cpp
    balancer.balance("C+O2->CO2");
    ```
-2. `void balance_with_given_compounds(const std::vector<std::string>& reactants, const std::vector<std::string>& products)` two `std::vector<std::string>` objects (as reactants and products) and try to balance them. E.g.,
+2. `void balance_with_given_compounds(const std::vector<std::string>& reactants, const std::vector<std::string>& products)` receives two `std::vector<std::string>` objects (as reactants and products) and try to balance them. E.g.,
    ```cpp
    balancer.balance_with_given_compounds({"Zn", "HCl"}, {"ZnCl2", "H2"});
    ```
