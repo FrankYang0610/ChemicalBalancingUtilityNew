@@ -26,7 +26,7 @@ inline std::string CBU_Console::version() {
 inline std::string CBU_Console::guide_message() {
     std::string guide_message = "";
     guide_message += "Use quit() to quit the console.\n";
-    guide_message += "Use multiple_results(off) to turn of it, use multiple_results(on) to allow multiple results Multiple results is enabled by default.\n" ;
+    guide_message += "Use multiple_results(off)` to disable multiple results, use multiple_results(on) to allow it. Multiple results is enabled by default.\n" ; 
     guide_message += "Directly type your chemical equation to call the built-in ChemicalBalancingUtility to balance.\n";
     return guide_message;
 }
