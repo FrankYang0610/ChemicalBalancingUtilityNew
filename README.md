@@ -49,7 +49,7 @@ Use **`CBU_Balancer balancer = CBU_Balancer()`** to create a new `ChemicalBalanc
 4. `std::pair<std::vector<std::string>, std::vector<std::vector<unsigned>>> get_main_matrix()` returns the information of stored equation data. Its `first` is the elements occurred in the equation, and its `second` is the _main matrix_ of the equation. For the _main matrix_, its row is each element (sorted by `std::sort`) and its column is each compound (by given order);
 5. `void clear_data()` clears all stored balancing data. **This is a must when you're to balance another equation.**.
 6. The following shows an overall sample:
-   ```
+   ```cpp
    balancer.balance("C+O2->CO2");
    std::cout << balancer.get_result() << std::endl;
    balancer.clear_data();
