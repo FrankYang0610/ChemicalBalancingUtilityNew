@@ -180,10 +180,10 @@ inline std::pair<std::string, unsigned> CBU_Balancer::_entity_str_to_entity_and_
 
         return entity_and_coefficient;
     } catch (const std::invalid_argument &ia) {
-        std::cout << ia.what() << std::endl;
+        std::cerr << ia.what() << std::endl;
         return {};
     } catch (const std::out_of_range &oor) {
-        std::cout << oor.what() << std::endl;
+        std::cerr << oor.what() << std::endl;
         return {};
     } catch (const std::runtime_error &re) {
         std::cerr << re.what() << std::endl;
