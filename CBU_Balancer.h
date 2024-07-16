@@ -153,13 +153,31 @@ inline std::pair<std::string, unsigned> CBU_Balancer::_entity_str_to_entity_and_
             }
         }
 
-        std::pair <std::string, unsigned> entity_and_coefficient;
-        entity_and_coefficient.first = (!is_subcompound) ? entity_str.substr(0, separating_index) : entity_str.substr(1, separating_index - 2);
-        entity_and_coefficient.second = (separating_index == -1) ? 1 : std::stoi(entity_str.substr(separating_index, entity_str.size() - separating_index));
-
-        if (!is_subcompound && entity_and_coefficient.first.size() >= 3) {
-            std::cout << ("WARNING: special element \"" + entity_and_coefficient.first + "\", the equation may not exist") << std::endl;
+        std::pair <std::string, unsigned> entity_and_coefficient; 
+        
+        // To enhance readability, these conditional statements will not be shortened by the ternary operator (?:).
+        if (!is_subcompound) {
+            if (separating_index == -1) { // coef = 1
+                entity_and_coefficient.first = entity_str;
+                entity_and_coefficient.second = 1;
+            } else {
+                entity_and_coefficient.first = entity_str.substr(0, separating_index);
+                entity_and_coefficient.second = std::stoi(entity_str.substr(separating_index, entity_str.size() - separating_index));
+            }
+        } else { // is_subcompound (within parentheses)
+            if (separating_index == -1) { // coef = 1
+                entity_and_coefficient.first = entity_str.substr(1, entity_str.size() - 2);
+                entity_and_coefficient.second = 1;
+            } else {
+                entity_and_coefficient.first = entity_str.substr(1, separating_index - 2);
+                entity_and_coefficient.second = std::stoi(entity_str.substr(separating_index, entity_str.size() - separating_index));
+            }
         }
+        
+        if (!is_subcompound && entity_and_coefficient.first.size() >= 3) {
+            std::cout << ("WARNING: special element \"" + entity_and_coefficient.first + "\", the equation may not exist.") << std::endl;
+        } 
+        
         return entity_and_coefficient;
     } catch (const std::invalid_argument &ia) {
         throw ia.what();
